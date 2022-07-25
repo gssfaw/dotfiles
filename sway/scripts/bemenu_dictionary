@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+choice=$(echo -e "Clipboard" | bemenu -i $colors --fn "JetBrainsMon 12" -p 'Type or paste the word')
+if [[ $choice = "Clipboard" ]]; then
+	QUERY=$(wl-paste)
+        sdcv -n "$QUERY" | bemenu $colors --fn "JetBrainsMono 12" -l 25 
+else
+	QUERY=$(echo $choice )
+        sdcv -n "$QUERY" | bemenu $colors --fn "JetBrainsMono 12" -l 25 
+fi
+#while [[ -n $QUERY ]]; do
+#    sdcv -n "$QUERY" | bemenu $colors --fn "JetBrainsMono 12" -l 25 
+#    QUERY=$(echo "$@" | bemenu $colors --fn "JetBrainsMono 12" -p 'Type a new word')
+#done

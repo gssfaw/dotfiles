@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+font="--fn JetbrainsMono 12"
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+workdir=$HOME/Videos
+file_dir="$(echo -e "Videos\nDownloads" | bemenu -i -l 2 $font $colors -p 'choose a directory')"
+case $file_dir in
+	"Videos")
+	file_path=$HOME/Videos;;
+"Downloads")
+	file_path=$HOME/Downloads;;
+esac
+filename="$(find "$file_path" -maxdepth 1 -type f | \
+                 awk -F'/' '{print $NF}' | \
+                 bemenu -i $colors $font -l 10 -p 'Choose a file')"
+
+if [[ ! -z $filename ]]; then
+option="$(echo -e "Cut a video\nMake a gif\nCompress a video\nResize a video" | bemenu -i -l 4 $font $colors -p 'Action')"
+fi
+filenamen="${filename%.*}"
+case $option in
+	"Cut a video")
+		startpoint=$(echo "$@" | bemenu $colors $font -p 'Start point')
+		lenght=$(echo "$@" | bemenu $colors $font -p 'lenght')
+		ffmpeg -y -i "$file_path/$filename" -ss $startpoint -t $lenght $file_path/output$filename && notify-send "done" || notify-send "An error occured";;
+	"Make a gif")
+		fps=$(echo "$@" | bemenu $colors $font -p 'fps')
+		scale=$(echo "$@" | bemenu $colors $font -p 'scale')
+		ffmpeg -y -i "$file_path/$filename" -filter_complex "[0:v] fps=$fps,scale=$scale:-2,split [a][b];[a] palettegen [p];[b][p] paletteuse" $file_path/$filenamen.gif && notify-send "done" || notify-send "An error occured";;
+	"Compress a video")
+		crf=$(echo "$@" | bemenu $colors $font -p 'crf')	
+		ffmpeg -y -i "$file_path/$filename" -vcodec libx264 -crf $crf $file_path/compressed$filenamen.mp4 && notify-send "done" || notify-send "An error occured";;
+	"Resize a video")
+		scale=$(echo "$@" | bemenu $colors $font -p 'scale')
+		ffmpeg -y -i "$file_path/$filename" -vf "scale=$scale:-2" $file_path/resized$filenamen.mp4 && notify-send "done" || notify-send "An error occured";;
+esac
+

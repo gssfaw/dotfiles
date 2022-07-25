@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+trap cleanup SIGINT SIGTERM ERR EXIT
+cleanup(){
+	imagedir=~/.cache
+	textdir=~/.cache
+	trap - SIGINT SIGTERM ERR EXIT
+	rm -f $imagedir/ocrimage.png 
+	rm -f $textdir/ocrresulttemp.txt
+}
+set -Eeuo pipefail
+imagedir=~/.cache
+textdir=~/.cache
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+font="--fn JetbrainsMono 11"
+grim -g "$(slurp)" "$imagedir"/"ocrimage".png
+chosen=$(echo -e "Eng\nRu\nJap\nJapV\nAutodetect" | bemenu -i -p 'Document language' $font $colors) 
+language=""
+case $chosen in 
+	"Eng")
+		language="-l eng";;
+	"Ru")
+		language="-l rus";;
+	"Jap")
+		language="-l jpn";;
+	"JapV")
+		language="-l jpn_vert";;
+esac
+tesseract $imagedir/ocrimage.png $textdir/ocrresulttemp $language
+lines=$(cat $textdir/ocrresulttemp.txt | wc -l)
+text=$(cat $textdir/ocrresulttemp.txt)
+echo "$text" | bemenu -p 'ocr result' -l $lines $colors $font
+echo "$text" | wl-copy | notify-send "copied"
+#if [[ $chosen="JapV" ]] || [[ $chosen="Jap" ]]; then 
+#	choise=$(echo -e "No\nYes" | bemenu -p "Do you wish to translate?" -i $font $colors)
+#	if [[ $choise="Yes" ]]; then
+#	echo "$text" | argos-translate --from-lang ja --to-lang en | bemenu $font $colors -l 5 
+#fi
+#fi

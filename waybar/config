@@ -1,0 +1,20 @@
+{
+	"spacing": 6,
+		"modules-left": ["sway/workspaces", "sway/mode", "custom/recording"],
+		"modules-center":["clock" ],
+		"modules-right":[ "custom/cmus", "pulseaudio", "sway/language", "tray"],
+	"sway/window": {
+		"max-length": 50
+	},
+	"custom/cmus": {
+		"format": " {}",
+		"interval": 7,
+		"exec": "cmus-remote -C \"format_print '%a - %t'\"",
+		"exec-if": "pgrep cmus",
+		"on-click": "cmus-remote -u",                        //toggle pause
+	},
+	"custom/recording": { "format": "|{}|",
+	"exec": "pidof wf-recorder > /dev/null && echo 'rec'",
+	"interval": 1,
+	},
+}

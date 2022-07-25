@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+lines="-l 5"
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+chosen=$(echo -e "List\nAdd\nStart Daemon\nStop Daemon" | bemenu --fn "JetBrainsMono 12" $lines $colors)
+case $chosen in 
+"List")
+    torrentnum=$(transmission-remote -l | bemenu --fn "JetBrainsMono 12" $lines $colors |  awk -F'[^0-9]+' '{ print $2 }' ) 
+	if [[ ! -z $torrentnum ]]; then
+        action=$(echo -e "Delete\nCheck seeds" | bemenu --fn "JetBrainsMono 12" $lines $colors)
+        case $action in 
+            "Delete")
+                confirmation=$(echo -e "Yes\nNo" | bemenu --fn "JetBrainsMono" -l 2 $colors -p "Are you sure?")
+                [[ "$confirmation" == "Yes" ]] && transmission-remote -t $torrentnum --remove-and-delete && notify-send "$torrentnum deleted";;
+            "Check seeds")
+                echo 2 | bemenu;;
+        esac
+    fi;; 
+"Add")
+    option=$(echo -e "Link\nFile" | bemenu --fn "JetBrainsMono 12" $colors -l 2)
+    case $option in 
+        "Link")
+            link=$(wl-paste)
+            transmission-remote -a "$link" && notify-send "added";;
+        "File")
+            filename=$(find $HOME/Downloads -type f -name "*.torrent" | bemenu --fn "JetBrainsMono 12" $colors $lines) 
+            transmission-remote -a "$filename" && notify-send "added";;
+    esac;;
+"Start Daemon")
+    torid=$(ps -a -u $USER | grep transmission-da ) || (transmission-daemon && notify-send "started");;
+"Stop Daemon")
+    torid=$(ps -a -u $USER | grep transmission-da | awk -F'[^0-9]+' '{ print $2 }') && kill -9 $torid && notify-send "Stopped";;
+
+esac

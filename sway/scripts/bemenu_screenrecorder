@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+chosen=$(echo -e "Stop Recording\nRecord\nRecord with audio\nRecord an area" | bemenu -i -l 5 --fn "JetBrainsMono 12" $colors -p 'Recording options')
+case $chosen in
+	"Stop Recording")
+	killall -s SIGINT wf-recorder;;
+	"Record")
+	output=$(echo -e "HDMI-A-2\nDVI-D-1" | bemenu -i -l 2 --fn "JetBrainsMono 12" $colors -p 'Select an output')
+	wf-recorder -f $HOME/Videos/recording_$(date +"%Y-%m-%d_%H:%M:%S.mp4") -o $output;;
+"Record with audio")
+	output=$(echo -e "HDMI-A-2\nDVI-D-1" | bemenu -i -l 2 --fn "JetBrainsMono 12" $colors -p 'Select an output')
+	wf-recorder --audio=alsa_output.pci-0000_28_00.4.analog-stereo.monitor -f $HOME/Videos/recording_$(date +"%Y-%m-%d_%H:%M:%S.mp4") -o $output;;
+"Record an area")
+	output=$(echo -e "HDMI-A-2\nDVI-D-1" | bemenu -i -l 2 --fn "JetBrainsMono 12" $colors -p 'Select an output')
+
+	wf-recorder -g "$(slurp)" -f $HOME/Videos/recording_$(date +"%Y-%m-%d_%H:%M:%S.mp4") -o $output;;
+esac
+

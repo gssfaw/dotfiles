@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+chosen=$(echo -e "[Cancel]\nLogout\nShutdown\nReboot\nSuspend\nTurn on second monitor\nTurn off second monitor" | bemenu -i --fn "JetBrainsMono 13" $colors -p 'Choose an option')
+case $chosen in 
+	"logout")
+	swaymsg exit;;
+	"Shutdown")
+	systemctl poweroff;;
+	"Reboot")
+	systemctl reboot;;
+	"Suspend")
+	systemctl suspend;;
+	"Turn off second monitor")
+	swaymsg output  DVI-D-1 disable;;
+	"Turn on second monitor")
+	swaymsg output DVI-D-1 enable;;
+esac
+#if [[ $chosen = "Logout" ]]; then
+#	swaymsg exit
+#elif [[ $chosen = "Shutdown" ]]; then
+#	systemctl poweroff
+#elif [[ $chosen = "Reboot" ]]; then
+#	systemctl reboot
+#elif [[ $chosen = "Suspend" ]]; then
+#	systemctl suspend
+#fi

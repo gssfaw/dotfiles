@@ -1,0 +1,159 @@
+@define-color highlight #b53389;
+@define-color fg #ebdbb2 ;
+@define-color base1 rgba(38 ,38 ,38 ,0.95 ) ;
+@define-color base2 #3c3836;
+
+@keyframes blink-warning {
+    70% {
+        color: white;
+    }
+
+    to {
+        color: white;
+        background-color: orange;
+    }
+}
+
+@keyframes blink-critical {
+    70% {
+      color: white;
+    }
+
+    to {
+        color: white;
+        background-color: red;
+    }
+}
+
+
+/* Reset all styles */
+* {
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    margin:0px;
+    padding: 0;
+}
+
+
+/* The whole bar */
+#waybar {
+    background: transparent;
+    color: @fg;
+    background-color: @base1;
+    font-family: JetbrainsMono;
+    font-size: 12px;
+}
+
+
+
+/* Every modules */
+#clock,
+#mode,
+#pulseaudio,
+#custom-cmus,
+#tray
+  {
+    padding:0;
+    margin:0;
+    /*background-color: @base2;*/
+
+}
+
+
+#clock {
+    border-radius:50px;
+    color:#b2b2b2;
+    font-family:JetbrainsMono;
+    font-weight: bold;
+    font-size:14px;
+
+}
+
+
+
+
+#window {
+    font-weight: bold;
+    /*background-color: @base2;*/
+    border-radius: 50px;
+    padding:0;
+    color:#b2b2b2;
+}
+
+#workspaces {
+    font-size:12px;
+    font-weight:bold;
+}
+
+#workspaces button {
+    font-weight:bold;
+    font-size:14px;
+    border-bottom: 0px solid transparent;
+    min-width:20px;
+    background-color: @base2; 
+    padding:0px;
+    margin:1px;
+    	color:#b2b2b2;
+}
+
+#workspaces button.focused {
+    border: 0px solid  @highlight;
+    /*margin-bottom: 1px;*/
+    padding-left:0;
+    color: @highlight;
+}
+
+#workspaces button.urgent {
+    border-color: #c9545d;
+    color: #c9545d;
+}
+#language {
+	min-width: 15px;
+    	color:#b2b2b2;
+}
+
+
+#tray {
+	padding-left: 8px;
+	padding-right: 8px;
+	border-left: 1px solid #AEAEAE;
+	margin-top:2px;
+	margin-bottom:2px
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: #c9545d;
+}
+#pulseaudio {
+	font-size: 12px;
+	font-weight: bold;
+	padding-right: 8px;
+	border-right: 1px solid #AEAEAE;
+	margin-top:2px;
+	margin-bottom:2px;
+    	color:#b2b2b2;
+}
+#language {
+	font-size:12px;
+	font-weight: bold;
+}
+#custom-cmus {
+    	color:#b2b2b2;
+	font-size: 12px;
+	font-weight: bold;
+	padding-right: 8px;
+	border-right: 1px solid #AEAEAE;
+	margin-top:2px;
+	margin-bottom:2px
+}
+#custom-recording {
+	font-size:12px;
+	font-weight: bold;
+	color:#b2b2b2
+}

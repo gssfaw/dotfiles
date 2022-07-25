@@ -1,0 +1,35 @@
+#settings
+set guioptions v
+set page-padding 8
+set window-height 1080
+set window-width 960
+set adjust-open width
+set recolor-keephue
+set scroll-step 150
+set adjust-open width
+set selection-clipboard clipboard
+#keybinds
+map <A-i> recolor
+
+#map <A-b>
+
+
+
+
+
+
+
+
+#setcolors 
+set recolor-darkcolor  "#FFFFFF"
+set recolor-lightcolor "#333333"
+set statusbar-fg "#FFFFFF"
+set statusbar-bg "#333333"
+set inputbar-fg "#FFFFFF"
+set inputbar-bg "#333333"
+set default-bg "#282828"
+set notification-error-bg "#AC4142" 
+set notification-error-fg "#151515" 
+set notification-warning-bg "#AC4142" 
+set notification-warning-fg "#151515"
+

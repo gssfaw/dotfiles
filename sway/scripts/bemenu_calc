@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Calculator using dmenu as an interface
+set -Eeuo pipefail
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+    menu="$(command -v bemenu)"
+
+answer=$(echo "$@" | bc -l | sed '/\./ s/\.\{0,1\}0\{1,\}$//')
+
+action=$(echo -e "Copy to clipboard" |
+$menu -p "Type to calculate $answer" --fn "JetBrainsMono 12" $colors)
+case $action in
+    "Copy to clipboard") echo "$answer" | wl-copy -n;;
+    "") ;;
+    *) $0 "$answer $action" ;;
+esac

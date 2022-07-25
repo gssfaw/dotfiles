@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+root_path=$HOME/Music/music/ost
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+chosen=$(echo -e "Pause\nPlay\nNext\nPrevious\nRepeat\nAddFav\nLaunch cmus\nAdd to queue\nExit cmus" | bemenu -i --fn "JetBrainsMono 12" $colors -l 9 -p 'cmus options')
+case $chosen in
+"Pause") cmus-remote -u;;
+"Play") cmus-remote -p;;
+"Next") cmus-remote -n;;
+"Previous") cmus-remote -r;;
+"Repeat") cmus-remote -C "toggle repeat_current";;
+"AddFav")
+	filename=$(cmus-remote -Q | grep file | cut -d " " -f2-)
+	cmus-remote -P "$filename"
+	notify-send "added to favourites";;
+"Launch cmus") foot -e cmus;;
+"Add to queue")
+	file_path="$(find $root_path -maxdepth 3 -type d  | sed 's|^'$root_path/'||' | sort | bemenu -i $colors --fn "JetBrainsMono 12" -l 10 -p 'Choose a folder')"
+	if [[ ! -z $file_path ]]; then
+		search_path="$root_path/$file_path"
+		cmus-remote -q "$search_path"
+	fi;;
+
+"Exit cmus") cmus-remote -C "quit"
+esac

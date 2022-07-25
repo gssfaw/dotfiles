@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# dmenu theming
+lines="-l 5"
+font=--fn "JetBrainsMono 13"
+colors="--ab #2C323E --af #9899a0 --nb #2C323E --nf #9899a0 --sb #BF616A --sf #2C323E"
+
+selected="$(ps -a -u $USER | \
+            bemenu -i -p "Type to search and select process to kill" \
+            $lines $colors --fn "JetBrainsMono 12"| \
+            awk '{print $1" "$4}')"; 
+
+if [[ ! -z $selected ]]; then
+
+    answer="$(echo -e "Yes\nNo" | \
+            bemenu -i -p "$selected will be killed, are you sure?" \
+            $lines $colors --fn "JetBrainsMono 12")"
+
+    if [[ $answer == "Yes" ]]; then
+        selpid="$(awk '{print $1}' <<< $selected)"; 
+        kill -9 $selpid
+    fi
+fi
+
+exit 0
